@@ -1,0 +1,9 @@
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/bin/Debug/Pong Client.dll
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/bin/Debug/Pong Client.pdb
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/obj/Debug/Pong Client.csproj.AssemblyReference.cache
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/obj/Debug/Pong Client.GeneratedMSBuildEditorConfig.editorconfig
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/obj/Debug/Pong Client.AssemblyInfoInputs.cache
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/obj/Debug/Pong Client.AssemblyInfo.cs
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/obj/Debug/Pong Client.csproj.CoreCompileInputs.cache
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/obj/Debug/Pong Client.dll
+/Users/adamuremek/Desktop/Pong Client/.mono/temp/obj/Debug/Pong Client.pdb

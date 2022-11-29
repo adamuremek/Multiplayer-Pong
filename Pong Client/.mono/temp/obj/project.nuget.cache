@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "HfQ46mWuFdlNiQQ5XlIcMz1dtqYjEA04np4P8nwWdN5/l+yW1uPcUXFW3iVAvxUpAYQQy16cLtDgIz3EXejB5A==",
+  "success": true,
+  "projectFilePath": "/Users/adamuremek/Desktop/Pong Client/Pong Client.csproj",
+  "expectedPackageFiles": [
+    "/Users/adamuremek/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.2/microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "/Users/adamuremek/.nuget/packages/microsoft.netframework.referenceassemblies.net472/1.0.2/microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

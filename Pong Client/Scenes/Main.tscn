@@ -1,0 +1,150 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Assets/Dynamic Fonts/Blippo.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Assets/Dynamic Fonts/Pixeloid.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Assets/Dynamic Fonts/PixeloidSmall.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Scripts/Menu.cs" type="Script" id=4]
+[ext_resource path="res://Assets/Dynamic Fonts/PixeloidButton.tres" type="DynamicFont" id=5]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 350, 5 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 5, 30 )
+
+[node name="Main" type="Node2D"]
+
+[node name="Background" type="Polygon2D" parent="."]
+position = Vector2( 1, 0 )
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 0, 136, 1, 640, 0, 640, 480, 0, 480 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2( 320, 240 )
+
+[node name="Game" type="Node2D" parent="."]
+visible = false
+
+[node name="Boundary" type="Node2D" parent="Game"]
+
+[node name="UpperBound" type="StaticBody2D" parent="Game/Boundary"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Boundary/UpperBound"]
+position = Vector2( 320, -5 )
+shape = SubResource( 2 )
+
+[node name="LowerBound" type="StaticBody2D" parent="Game/Boundary"]
+position = Vector2( 0, 490 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Boundary/LowerBound"]
+position = Vector2( 320, -5 )
+shape = SubResource( 2 )
+
+[node name="Paddle1" type="RigidBody2D" parent="Game"]
+position = Vector2( 30, 240 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Paddle1"]
+shape = SubResource( 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Game/Paddle1"]
+scale = Vector2( 1, 6 )
+polygon = PoolVector2Array( 5, 5, -5, 5, -5, -5, 5, -5 )
+
+[node name="Paddle2" type="RigidBody2D" parent="Game"]
+position = Vector2( 610, 240 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Paddle2"]
+shape = SubResource( 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Game/Paddle2"]
+scale = Vector2( 1, 6 )
+polygon = PoolVector2Array( 5, 5, -5, 5, -5, -5, 5, -5 )
+
+[node name="Menu" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="Title" type="Label" parent="Menu"]
+margin_left = 240.0
+margin_top = 2.0
+margin_right = 417.0
+margin_bottom = 83.0
+custom_fonts/font = ExtResource( 1 )
+text = "PONG"
+
+[node name="M1" type="Node2D" parent="Menu"]
+
+[node name="Fields" type="Node2D" parent="Menu/M1"]
+position = Vector2( 320, 230 )
+
+[node name="LBL_IP" type="Label" parent="Menu/M1/Fields"]
+margin_left = -107.0
+margin_top = -26.0
+margin_right = 3.0
+margin_bottom = -7.0
+custom_fonts/font = ExtResource( 3 )
+text = "IP Address:"
+
+[node name="LBL_Port" type="Label" parent="Menu/M1/Fields"]
+margin_left = -107.0
+margin_top = 7.0
+margin_right = -57.0
+margin_bottom = 26.0
+custom_fonts/font = ExtResource( 3 )
+text = "Port:"
+
+[node name="LineEdit" type="LineEdit" parent="Menu/M1/Fields"]
+margin_left = 13.0
+margin_top = -29.0
+margin_right = 143.0
+custom_fonts/font = ExtResource( 3 )
+placeholder_text = "X.X.X.X"
+
+[node name="LineEdit2" type="LineEdit" parent="Menu/M1/Fields"]
+margin_left = 13.0
+margin_top = 2.0
+margin_right = 143.0
+margin_bottom = 31.0
+custom_colors/selection_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 3 )
+placeholder_text = "XXXX"
+
+[node name="Label" type="Label" parent="Menu/M1/Fields"]
+margin_left = -141.0
+margin_top = -65.0
+margin_right = 171.0
+margin_bottom = -43.0
+custom_fonts/font = ExtResource( 2 )
+text = "Connect to Browser Server:"
+
+[node name="BTN_Connect" type="Button" parent="Menu/M1"]
+margin_left = 248.0
+margin_top = 359.0
+margin_right = 422.0
+margin_bottom = 384.0
+custom_fonts/font = ExtResource( 5 )
+text = "Connect"
+
+[node name="M2" type="Node2D" parent="Menu"]
+visible = false
+
+[node name="BTN_NewGame" type="Button" parent="Menu/M2"]
+margin_left = 128.0
+margin_top = 266.0
+margin_right = 243.0
+margin_bottom = 286.0
+text = "Start New Game"
+
+[node name="BTN_JoinGame" type="Button" parent="Menu/M2"]
+margin_left = 351.0
+margin_top = 269.0
+margin_right = 466.0
+margin_bottom = 289.0
+text = "Join Game"
+
+[node name="LineEdit" type="LineEdit" parent="Menu/M2"]
+margin_left = 235.0
+margin_top = 203.0
+margin_right = 403.0
+margin_bottom = 227.0
+
+[connection signal="pressed" from="Menu/M1/BTN_Connect" to="Menu" method="onConnectButtonPress"]
