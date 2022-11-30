@@ -1,4 +1,4 @@
-package com.gameserver;
+package com.hubserver;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
