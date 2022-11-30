@@ -17,13 +17,13 @@ public class GameProcess extends Thread{
     }
 
     public void stepPhysics(){
-        Vector2 p1Velocity = gameData.getP1Velocity();
-        Vector2 p2Velocity = gameData.getP2Velocity();
-        Vector2 ballVelocity = gameData.getBallVelocity();
+        Vector2 p1VecPos = gameData.getP1VecPos();
+        Vector2 p2VecPos = gameData.getP2VecPos();
+        Vector2 ballVecPos = gameData.getBallVecPos();
 
-        float[] ballPos =  gameData.getBallPos();
-        float[] p1Pos = gameData.getP1Pos();
-        float[] p2Pos = gameData.getP2Pos();
+        Vector2 ballVelDir = gameData.getBallVelDir();
+
+        
 
         
         
