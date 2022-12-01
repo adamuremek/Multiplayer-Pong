@@ -3,16 +3,14 @@ package com.gameserver;
 import java.util.LinkedList;
 
 public class GameData {
-    private LinkedList<ClientHandle> gameClients = new LinkedList<>();
-    private ServerInfo serverInfo;
-
-    private Vector2 ballVelDir = new Vector2();
-
-    private Vector2 p1VecPos = new Vector2();
-    private Vector2 p2VecPos = new Vector2();
-    private Vector2 ballVecPos = new Vector2();
-
-    private int[] score = new int[2];
+    public LinkedList<ClientHandle> gameClients = new LinkedList<>();
+    public ServerInfo serverInfo;
+    public Vector2 ballVelDir = new Vector2();
+    public Vector2 p1VecPos = new Vector2();
+    public Vector2 p2VecPos = new Vector2();
+    public Vector2 ballVecPos = new Vector2();
+    public int p1score = 0;
+    public int p2score = 0;
 
     public GameData(ServerInfo serverInfo) {
         this.serverInfo = serverInfo;
@@ -69,8 +67,12 @@ public class GameData {
         this.ballVelDir = ballVelDir;
     }
 
-    public void setScore(int[] score) {
-        this.score = score;
+    public void addPoint(int playerIdx) {
+        score[playerIdx] += 1;
+    }
+
+    public void update() {
+        // TODO update values from data
     }
     
 }

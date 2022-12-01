@@ -2,8 +2,8 @@ package com.gameserver;
 
 //TODO: Jordan
 public class Vector2 {
-    float x;
-    float y;
+    public float x;
+    public float y;
 
     public Vector2() {
         x = 0;

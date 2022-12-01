@@ -14,6 +14,10 @@ public class ClientHandle extends Thread {
         this.gameData = gameData;
         
         // TODO get player name from rcvPacket
+        
+        
+
+        
         gameData.addClient(this, "");
     }
 
@@ -21,7 +25,8 @@ public class ClientHandle extends Thread {
 
     @Override
     public void run() {
-
+        
+        gameData.update();
 
     }
 }

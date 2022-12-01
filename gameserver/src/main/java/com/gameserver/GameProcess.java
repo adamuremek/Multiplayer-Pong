@@ -9,25 +9,31 @@ public class GameProcess extends Thread{
     private static final float PADDLE_SIZE_Y = INITAL_SIZE * 7;
     private static final float BALL_RADIUS = INITAL_SIZE;
 
-    
-
     private GameData gameData;
+
     public GameProcess(GameData gameData){
         this.gameData = gameData;
+        this.run();
     }
 
     public void stepPhysics(){
-        Vector2 p1VecPos = gameData.getP1VecPos();
-        Vector2 p2VecPos = gameData.getP2VecPos();
-        Vector2 ballVecPos = gameData.getBallVecPos();
-
-        Vector2 ballVelDir = gameData.getBallVelDir();
-
+        GameState gameState = new GameState();
+        
+        /* Stream input will update this*/
         
 
         
-        
-        
+        if (gameData.getBallVecPos().x < 0){
+            gameData.addPoint(0);
+            // TODO gameData.reset()
+
+        } else if(gameData.getBallVecPos().x > X_BOUNDS) {
+            gameData.addPoint(1);
+            // TODO gameData.reset()
+
+        }
+
+
 
 
 
@@ -39,6 +45,6 @@ public class GameProcess extends Thread{
 
     @Override
     public void run(){
-        
+        tick();
     }
 }
