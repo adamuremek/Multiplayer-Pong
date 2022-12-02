@@ -6,7 +6,7 @@ public class GameData {
     public LinkedList<ClientHandle> gameClients = new LinkedList<>();
     public ServerInfo serverInfo;
     public Vector2 ballVelDir = new Vector2();
-    public Vector2 p1VecPos = new Vector2();
+   
     public Vector2 p2VecPos = new Vector2();
     public Vector2 ballVecPos = new Vector2();
     public int p1score = 0;
@@ -31,9 +31,7 @@ public class GameData {
         return gameClients.size() == 2;
     }
 
-    public Vector2 getP1VecPos() {
-        return p1VecPos;
-    }
+
 
     public void update() {
         // TODO update values from data
