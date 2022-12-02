@@ -35,42 +35,6 @@ public class GameData {
         return p1VecPos;
     }
 
-    public Vector2 getP2VecPos() {
-        return p2VecPos;
-    }
-
-    public Vector2 getBallVecPos() {
-        return ballVecPos;
-    }
-
-    public Vector2 getBallVelDir() {
-        return ballVelDir;
-    }
-
-    public int[] getScore() {
-        return score;
-    }
-
-    public void setP1VecPos(Vector2 p1vecPos) {
-        this.p1VecPos = p1vecPos;
-    }
-
-    public void setP2VecPos(Vector2 p2vecPos) {
-        this.p2VecPos = p2vecPos;
-    }
-
-    public void setBallVecPos(Vector2 ballVecPos) {
-        this.ballVecPos = ballVecPos;
-    }
-
-    public void setBallVelDir(Vector2 ballVelDir) {
-        this.ballVelDir = ballVelDir;
-    }
-
-    public void addPoint(int playerIdx) {
-        score[playerIdx] += 1;
-    }
-
     public void update() {
         // TODO update values from data
     }
