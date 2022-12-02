@@ -37,15 +37,14 @@ public class Paddle {
         b = new Vector2(center.x + PADDLE_SIZE_X, center.y + PADDLE_SIZE_Y);
         c = new Vector2(center.x + PADDLE_SIZE_X, center.y - PADDLE_SIZE_Y);
         d = new Vector2(center.x - PADDLE_SIZE_X, center.y - PADDLE_SIZE_Y);
-        
+
         float x;
-        if (this.side == Side.LEFT) {
+        if (this.side == Side.LEFT)
             x = -(-center.y + (this.b.y - this.b.x));
 
-        } else if (this.side == Side.RIGHT) {
+        else if (this.side == Side.RIGHT)
             x = (-center.y + (this.b.y + this.b.x));
-            
-        } else
+        else
             return;
 
         focalPoint = new Vector2(x, center.y);
