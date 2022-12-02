@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 
 public class ClientHandle extends Thread{
@@ -45,20 +46,28 @@ public class ClientHandle extends Thread{
         this.isActive = true;
         out = new DataOutputStream(sock.getOutputStream());
         in = new DataInputStream(sock.getInputStream());
+        
 
+        //Get identifyer byte of the incoming connnection
+        System.out.println("AVAILABLE: " + in.available());
+        byte id = in.readByte();
         //Start the thread
         this.start();
 
         //Evaluate handle type and initialize handle
-        MessageType mssgType = byteToMssg(in.readByte());
+        
+        System.out.println(id);
+        MessageType mssgType = byteToMssg(id);
         switch(mssgType){
             //If the first byte is 1, its a game client
             case IDENTIFIER_GAME_CLIENT:
+                System.out.println("NEW CLENT");
                 hub.addGameClient(this);
                 hub.sendServerListToClient(this);
                 break;
             //If the first byte is 2, its a game server
             case IDENTIFIER_GAME_SERVER:
+                System.out.println("NEW SERVER");
                 hub.addGameServer(this);
                 this.serverIdentifier = hub.generateIdentifier();
                 //Generate identifier and send it to client
@@ -69,6 +78,7 @@ public class ClientHandle extends Thread{
                 break;
                 
             default:
+                System.out.println(mssgType);
                 break;
         }
     }
@@ -118,7 +128,7 @@ public class ClientHandle extends Thread{
             out.writeInt(data.length);
             out.write(data);
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("SEND FAILED");
         }
     }
 
@@ -168,6 +178,9 @@ public class ClientHandle extends Thread{
             } catch (EOFException e){
                 endHandle();
                 System.out.println("SOME SHIT HEPAEIJOIFEJN");
+            } catch (SocketException e){
+                endHandle();
+                System.out.println("socket err");
             } catch (Exception e) {
                 System.out.println("HANDLE INTERRUPTED " + e.getClass().getCanonicalName());
             }

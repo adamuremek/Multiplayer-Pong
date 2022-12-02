@@ -32,7 +32,9 @@ public class ClientListener extends Thread{
     public void run(){
         while(this.isActive){
             try {
-                new ClientHandle(serverSock.accept(), hub);
+                Socket s = serverSock.accept();
+                System.out.println("INCOMING CLIENT");
+                new ClientHandle(s, hub);
             } catch (SocketException e) {
                 System.out.println("Good error");
             } catch (EOFException e){
