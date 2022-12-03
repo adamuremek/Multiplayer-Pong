@@ -10,6 +10,7 @@ public class GameServer {
     public static HubServerHandle hub;
     public static CLI cli;
     static HashMap<String, String> argTable;
+    public static GameProcess gp;
 
 
     static class Cleanup extends Thread{
@@ -21,6 +22,7 @@ public class GameServer {
             System.out.println("CLEANUP DONE");
         }
     }
+
 
     public static boolean parseArgs(String[] args){
         //Initialize the arg table and a set of valid keys for checking
@@ -62,7 +64,7 @@ public class GameServer {
         cl = new ClientListener(serverInfo.serverPort);
         hub = new HubServerHandle(argTable.get("hubAddr"), Integer.parseInt(argTable.get("hubPort")));
         cli = new CLI();
-
+        gp = new GameProcess();
 
         //Shutdown hook to clean up ports and other nonsense
         Runtime.getRuntime().addShutdownHook(new Cleanup());

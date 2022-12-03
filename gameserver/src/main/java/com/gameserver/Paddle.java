@@ -1,5 +1,8 @@
 package com.gameserver;
 
+/**
+ * @author Jordan Anodjo
+ */
 public class Paddle {
 
     private static final float INITAL_SIZE = 5;
@@ -73,9 +76,9 @@ public class Paddle {
         }
     }
 
-    public Vector2 isCollid(Ball ball) {
+    public Vector2 getCollision(Ball ball) {
 
-        Vector2 ballPosition = ball.getPosition();
+        Vector2 ballPosition = ball.position;
 
         // Default closests X and Y to be the center of the ball
         float closestX = ballPosition.x;
@@ -102,6 +105,14 @@ public class Paddle {
 
         // Return the vector of collision if it DNE return an impossible value for this program 
         return distance <= Ball.RADIUS ? new Vector2(closestX, closestY) : new Vector2(-1, -1);
+    }
+
+    public void reboundOfBall(Ball ball, Vector2 collision) {
+        
+        Vector2 newDirection = new Vector2(collision.x - focalPoint.x, collision.y - focalPoint.y);
+        Vector2.normalize(newDirection);
+        ball.direction = newDirection;
+
     }
 
 }

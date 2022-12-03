@@ -2,41 +2,51 @@ package com.gameserver;
 
 import java.util.Random;
 
+/**
+ * @author Jordan Anodjo
+ * 
+ * The ball the program will be using
+ */
 public class Ball {
     public static final float RADIUS = GameProcess.INITAL_SIZE;
     public static final float SPEED_RATE = 1 / 8f;
 
-    private Vector2 direction;
-    private Vector2 position;
+    public Vector2 direction;
+    public Vector2 position;
+
+    public Random random = new Random();
     private float speed;
+    private boolean exist;
 
     public Ball() {
         this.direction = new Vector2();
         this.position = new Vector2(GameProcess.X_BOUNDS / 2, GameProcess.Y_BOUNDS / 2);
+        exist = false;
     }
 
     public void spawn() {
-        Random random = new Random();
-        float randomX = (float) Math.cos((random.nextFloat() * (2 * Math.PI)));
-        float randomY = (float) Math.sin(random.nextFloat() * (2 * Math.PI));
-        direction.x = randomX;
-        direction.y = randomY;
-        direction.normalize();
+        direction.x = (float) Math.cos((random.nextFloat() * (2 * Math.PI)));
+        direction.y = (float) Math.sin(random.nextFloat() * (2 * Math.PI));
+        Vector2.normalize(direction);
+        speed = 1;
+        exist = true;
     }
 
     public void increaseSpeed() {
         this.speed += SPEED_RATE;
     }
 
-    public void setDirection(Vector2 direction) {
-        this.direction = direction;
+    public float getSpeed() {
+        return speed;
     }
 
-    public void setPosition(Vector2 position) {
-        this.position = position;
+
+    public boolean exists() {
+        return exist;
     }
 
-    public Vector2 getPosition() {
-        return position;
+    public void despawn() {
+        exist = false;
     }
+
 }

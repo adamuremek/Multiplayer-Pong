@@ -27,9 +27,31 @@ public class ClientListener extends Thread {
         }
     }
 
-    public void endListener(){
+    public void endListener() {
         this.isActive = false;
         sock.close();
+    }
+
+    public void updateClients() {
+        try {
+            
+            byte[] data = GameServer.gameData.serializeCurrentState((byte) 1);
+            if (GameServer.gameData.gameClients[0] != null){
+                DatagramPacket packet = new DatagramPacket(data, data.length, GameServer.gameData.gameClients[0].clientAddr, GameServer.gameData.gameClients[0].clientPort);
+                sock.send(packet);
+            }
+
+            data[0] = (byte)2;
+            if (GameServer.gameData.gameClients[1] != null){
+                DatagramPacket packet = new DatagramPacket(data, data.length, GameServer.gameData.gameClients[1].clientAddr, GameServer.gameData.gameClients[1].clientPort);
+                sock.send(packet);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        
     }
 
     @Override
