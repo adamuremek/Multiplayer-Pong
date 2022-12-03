@@ -3,7 +3,6 @@ package com.gameserver;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 //TODO: Jordan
 public class ClientListener extends Thread {
