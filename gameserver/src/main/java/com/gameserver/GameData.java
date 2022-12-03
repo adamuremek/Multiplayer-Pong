@@ -2,13 +2,14 @@ package com.gameserver;
 
 import java.util.LinkedList;
 
+import com.gameserver.Paddle.Side;
+
 public class GameData {
     public LinkedList<ClientHandle> gameClients = new LinkedList<>();
     public ServerInfo serverInfo;
-    public Vector2 ballVelDir = new Vector2();
-   
-    public Vector2 p2VecPos = new Vector2();
-    public Vector2 ballVecPos = new Vector2();
+    public Ball ball = new Ball();
+    public Paddle p1 = new Paddle(Side.LEFT);
+    public Paddle p2 = new Paddle(Side.RIGHT);
     public int p1score = 0;
     public int p2score = 0;
 
@@ -30,8 +31,6 @@ public class GameData {
     public boolean isFull() {
         return gameClients.size() == 2;
     }
-
-
 
     public void update() {
         // TODO update values from data
