@@ -27,7 +27,10 @@ public class GameData extends Thread{
 
         //Create a new client handle and update game data
         gameClients[clientData[0] - 1] = new ClientHandle(clientAddr, clientPort, ps.playerIdentifier, ps.playerName, ps.playerColor);
-        //TODO: UPDATE PADDLE POSITION
+        if(ps.playerIdentifier == (byte)1)
+            p1.movePaddle(ps.paddlePosY);
+        else
+            p2.movePaddle(ps.paddlePosY);
         setMessage(String.format("Player %s has connected.", ps.playerName));
         
 
@@ -41,7 +44,10 @@ public class GameData extends Thread{
     public void clientUpdate(byte[] clientData){
         //Deserialize playerstate
         PlayerState ps = new PlayerState(clientData);
-        //TODO: UDPATE PADDLE POSITION
+        if(ps.playerIdentifier == (byte)1)
+            p1.movePaddle(ps.paddlePosY);
+        else
+            p2.movePaddle(ps.paddlePosY);
 
         gameClients[ps.playerIdentifier - 1].resetTimeout();
     }

@@ -7,10 +7,8 @@ public class GameProcess extends Thread {
     public static final float INITAL_SIZE = 5;
     
 
-    private GameData gameData;
 
-    public GameProcess(GameData gameData) {
-        this.gameData = gameData;
+    public GameProcess() {
         this.run();
     }
 
