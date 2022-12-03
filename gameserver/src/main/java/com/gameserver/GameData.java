@@ -1,14 +1,13 @@
 package com.gameserver;
 
 import java.net.InetAddress;
+import com.gameserver.Paddle.Side;
 
 public class GameData extends Thread{
-    private static final short MAX_MESSAGE_SIZE = 50;
-
     public ClientHandle[] gameClients = new ClientHandle[2];
-    public Vector2 ballVelDir = new Vector2();
-    public Vector2 p2VecPos = new Vector2();
-    public Vector2 ballVecPos = new Vector2();
+    public Ball ball = new Ball();
+    public Paddle p1 = new Paddle(Side.LEFT);
+    public Paddle p2 = new Paddle(Side.RIGHT);
     public int p1score = 0;
     public int p2score = 0;
     private String globalMssg;
@@ -61,7 +60,6 @@ public class GameData extends Thread{
         GameServer.serverInfo.player2Name = disconnectedClient.playerIdentifier == (byte)2 ? "" : GameServer.serverInfo.player2Name;
         GameServer.serverInfo.isFull = playersInSession() == gameClients.length;
         GameServer.hub.sendModify();
-
     }
 
     public byte[] serializeCurrentState(byte playerIdentifier){
