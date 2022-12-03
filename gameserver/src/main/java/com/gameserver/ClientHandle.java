@@ -1,32 +1,60 @@
 package com.gameserver;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.*;
 
-//TODO: Jordan
 public class ClientHandle extends Thread {
+    private static final short TIMEOUT_DURATION = 10;
+    
+    private boolean isActive;
+    private short currentTimeoutCount;
 
-    DatagramSocket sock;
-    GameData gameData;
+    public InetAddress clientAddr;
+    public int clientPort;
+    public byte playerIdentifier;
+    public  String playerName = "";
+    public byte[] playerColor = {(byte)255, (byte)255, (byte)255};
 
-    public ClientHandle(DatagramSocket sock, DatagramPacket rcvPacket, GameData gameData){
-        this.sock = sock;
-        this.gameData = gameData;
-        
-        // TODO get player name from rcvPacket
-        
-        
 
+    public ClientHandle(InetAddress clientAddr, int clientPort, byte playerIdentifier, String playerName, byte[] playerColor){
+        //Initialize the handle
+        this.clientAddr = clientAddr;
+        this.clientPort = clientPort;
+        this.playerIdentifier = playerIdentifier;
+        this.playerName = playerName;
+        this.playerColor = playerColor;
+        this.isActive = true;
+        this.currentTimeoutCount = TIMEOUT_DURATION;
         
-        gameData.addClient(this, "");
+        //Start timeout loop
+        this.start();
     }
 
     
+    public void endHandle(){
+        this.isActive = false;
+        GameServer.gameData.clientDisconnect(playerIdentifier);
+    }
+
+    public void resetTimeout(){
+        this.currentTimeoutCount = TIMEOUT_DURATION;
+    }
 
     @Override
     public void run() {
-        
-        gameData.update();
+        while(isActive){
+            try {
+                if(currentTimeoutCount == 0){
+                    endHandle();
+                    return;
+                }
+    
+                Thread.sleep(1000);
+                currentTimeoutCount--;
 
+            } catch (InterruptedException e) {
+                endHandle();
+                return;
+            }
+        }
     }
 }

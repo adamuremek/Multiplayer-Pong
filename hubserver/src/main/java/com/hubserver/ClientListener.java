@@ -20,7 +20,6 @@ public class ClientListener extends Thread{
 
     public void endListener(){
         try {
-            System.out.println("STINKY FAGIT");
             this.isActive = false;
             serverSock.close();
         } catch (Exception e) {

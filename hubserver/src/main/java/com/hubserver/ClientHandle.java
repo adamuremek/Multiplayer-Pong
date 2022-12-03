@@ -118,17 +118,32 @@ public class ClientHandle extends Thread{
                 hub.dropGameClient(this);
             else
                 hub.dropGameServer(this, this.serverIdentifier);
+                hub.notifyGameClientsDrop(this.serverIdentifier);
         }
     }
 
-    public void send(byte[] data, MessageType mssgType){
+    public boolean send(byte[] data, MessageType mssgType){
         try {
             //Send Data in the following order: byte flag, data length, data bytes
             out.writeByte(mssgType.intValue());
             out.writeInt(data.length);
             out.write(data);
+
+            return true;
         } catch (Exception e) {
             System.out.println("SEND FAILED");
+            return false;
+        }
+    }
+
+    public boolean informOfDrop(int serverIdentifier){
+        try {
+            out.writeByte(MessageType.DROP_GAMESERVER.intValue());
+            out.writeInt(serverIdentifier);
+            return true;
+        } catch (Exception e) {
+            System.out.println("SEND FAILED");
+            return false;
         }
     }
 
@@ -164,7 +179,7 @@ public class ClientHandle extends Thread{
                         case MODIFY_GAMESERVER:
                             data = new byte[in.readInt()];
                             in.readFully(data);
-
+                            hub.notifyGameClientsModify(this.serverIdentifier, data);
                             break;
                         //Game server drops
                         case DROP_GAMESERVER:

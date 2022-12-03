@@ -65,6 +65,13 @@ public class HubData {
         }
     }
 
+    public void notifyGameClientsDrop(int serverIdentifier){
+        //Tell all clients which server was dropped from the hub
+        for(ClientHandle ch : gameClients){
+            ch.informOfDrop(serverIdentifier);
+        }
+    }
+
     public void sendServerListToClient(ClientHandle gameClient){
         for(ServerInfo serverInfo : serverList.values()){
             gameClient.send(serverInfo.serialize(), MessageType.SERVER_LIST);

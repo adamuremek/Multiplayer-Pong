@@ -20,7 +20,6 @@ public class GameProcess extends Thread {
 
 
     public void stepPhysics() {
-        GameState gameState = new GameState();
 
         
 

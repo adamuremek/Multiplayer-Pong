@@ -1,42 +1,78 @@
 package com.gameserver;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.*;
 
-//TODO: Jordan
+
 public class ClientListener extends Thread {
 
-    DatagramSocket socket;
-    DatagramPacket rcvPacket;
-    GameData gameData;
-    byte[] buf = new byte[600];
+    private DatagramSocket sock;
+    private boolean isActive;
+    byte[] buf = new byte[PlayerState.PLAYER_STATE_BUF_SIZE];
 
-    public ClientListener(int port, GameData gameData) throws IOException {
-        socket = new DatagramSocket(port);
-        this.gameData = gameData;
+    public ClientListener(int port) throws IOException {
+        this.sock = new DatagramSocket(port);
     }
 
-    private void endHandle(){
-        this.interrupt();
+    private void attemptHeartbeat(DatagramPacket incomingClient){
+        try {
+            if(GameServer.gameData.playersInSession() < 2){
+                //Generate a byte array with an identifer for the new client
+                byte[] currentState = GameServer.gameData.serializeCurrentState((byte)(GameServer.gameData.getOpenPlayerSlot() + 1));
+                DatagramPacket heartbeatPckt = new DatagramPacket(currentState, currentState.length, incomingClient.getAddress(), incomingClient.getPort());
+                sock.send(heartbeatPckt);
+            }
+        } catch (Exception e) {
+            System.out.println("HEARTBEAT FAILED");
+        }
+    }
+
+    public void endListener(){
+        this.isActive = false;
+        sock.close();
     }
 
     @Override
     public void run() {
 
-        while (!isInterrupted()) {
+        while (this.isActive){
             try {
-                System.out.println("Waiting for incoming connections");
-                rcvPacket = new DatagramPacket(buf, buf.length);
-                socket.receive(rcvPacket);
+                //Block and wait for incoming player data
+                DatagramPacket incomingPlayerData = new DatagramPacket(buf, buf.length);
+                sock.receive(incomingPlayerData);
 
-                // Create threads so server can handle multiple clients at once.
-                if (!gameData.isFull())
-                    new ClientHandle(socket, rcvPacket, gameData);
+                //Get the data
+                byte[] data = incomingPlayerData.getData();
+                
+                //Check the identifier byte to see if the player is new or already in the current session.
+                switch(data[0]){
+                    case (byte)0:
+                        //Send the new client a packet with an identifier.
+                        //If they receive it and their next packet has the identifier, then add them to the session.
+                        attemptHeartbeat(incomingPlayerData);
+                        break;
+                    case (byte)1:
+                        //If player 1 already been stored in the session, update it.
+                        //Otherwise, create add the player to the session.
+                        if(GameServer.gameData.playerExists(data[0]))
+                            GameServer.gameData.clientUpdate(data);
+                        else
+                            GameServer.gameData.clientJoin(data, incomingPlayerData.getAddress(), incomingPlayerData.getPort());
+                        break;
+                    case (byte)2:
+                        //If player 2 already been stored in the session, update it.
+                        //Otherwise, create add the player to the session.
+                        if(GameServer.gameData.playerExists(data[0]))
+                            GameServer.gameData.clientUpdate(data);
+                        else
+                            GameServer.gameData.clientJoin(data,  incomingPlayerData.getAddress(), incomingPlayerData.getPort());
+                        break;
+                    default:
+                        break;
+                }  
 
-            } catch (IOException e) {
-                System.out.println(e.getClass().getCanonicalName());
-                System.out.println("HANDLE INTERRUPTED");
+            } catch (Exception e) {
+                System.out.println("LISTENER ENCOUNTERED AN ERROR");
             }
 
         }
