@@ -47,7 +47,6 @@ public class HubServerHandle extends Thread{
         in.read(buf);
 
         GameServer.serverInfo.identifier = ByteBuffer.wrap(buf).getInt();
-        System.out.println(GameServer.serverInfo.identifier);
 
         //Send current server state
         byte[] serverInfo = GameServer.serverInfo.serialize();

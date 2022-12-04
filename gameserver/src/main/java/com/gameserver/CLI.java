@@ -3,7 +3,7 @@ package com.gameserver;
 import java.io.IOException;
 
 public class CLI extends Thread{
-    private static final int REFRESH_RATE = 10000;
+    private static final int REFRESH_RATE = 5000;
     private boolean isActive;
 
     public CLI(){
@@ -57,14 +57,14 @@ public class CLI extends Thread{
     public void run(){
         try {
             while(this.isActive){
-                //clearConsole();
-                //System.out.println(String.format("%s\n\n\n", generateHeader()));
-                //System.out.println(getStats());
+                clearConsole();
+                System.out.println(String.format("%s\n\n\n", generateHeader()));
+                System.out.println(getStats());
 
                 Thread.sleep(REFRESH_RATE);
             }
         } catch (Exception e) {
-            System.out.println("SHIT HAPPENED HERE " + e.getClass().getCanonicalName());
+            System.out.println("CLI ERROR");
         }
         System.out.println("CLI THREAD ENDED");
     }

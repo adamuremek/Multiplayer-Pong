@@ -305,6 +305,7 @@ stream = ExtResource( 16 )
 position = Vector2( 320, 240 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Ball"]
+scale = Vector2( 1.5, 1.5 )
 shape = SubResource( 5 )
 
 [node name="ballTexture" type="TextureRect" parent="Game/Ball"]

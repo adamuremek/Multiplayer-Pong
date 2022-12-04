@@ -11,11 +11,9 @@ public class ClientListener extends Thread {
     byte[] buf = new byte[PlayerState.PLAYER_STATE_BUF_SIZE];
 
     public ClientListener(int port) throws IOException {
-        System.out.println("CONSTRUCT");
         this.sock = new DatagramSocket(port);
         this.isActive = true;
         this.start();
-        System.out.println("SCOKET MADe");
     }
 
     private void attemptHeartbeat(DatagramPacket incomingClient){

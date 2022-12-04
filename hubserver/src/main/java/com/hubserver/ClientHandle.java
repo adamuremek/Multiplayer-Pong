@@ -49,32 +49,25 @@ public class ClientHandle extends Thread{
         
 
         //Get identifyer byte of the incoming connnection
-        System.out.println("AVAILABLE: " + in.available());
         byte id = in.readByte();
         //Start the thread
         this.start();
 
         //Evaluate handle type and initialize handle
-        
-        System.out.println(id);
         MessageType mssgType = byteToMssg(id);
         switch(mssgType){
             //If the first byte is 1, its a game client
             case IDENTIFIER_GAME_CLIENT:
-                System.out.println("NEW CLENT");
                 this.serverIdentifier = 0;
                 hub.addGameClient(this);
                 hub.sendServerListToClient(this);
                 break;
             //If the first byte is 2, its a game server
             case IDENTIFIER_GAME_SERVER:
-                System.out.println("NEW SERVER");
                 hub.addGameServer(this);
                 this.serverIdentifier = hub.generateIdentifier();
-                System.out.println("IDENTIFIER = " + this.serverIdentifier);
                 //Generate identifier and send it to client
                 if(this.serverIdentifier != -1){
-                    System.out.println("SENT IDENTIFIER");
                     send(ByteBuffer.allocate(4).putInt(this.serverIdentifier).array(), MessageType.SET_IDENTIFIER);
                 }
                 else
@@ -86,7 +79,6 @@ public class ClientHandle extends Thread{
                 break;
         }
 
-        System.out.println("CONSTRUCTION DONE");
     }
 
     private MessageType byteToMssg(byte b){
@@ -127,7 +119,6 @@ public class ClientHandle extends Thread{
             if(serverIdentifier == 0)
                 hub.dropGameClient(this);
             else{
-                System.out.println("CLIENT DROPPED :(");
                 hub.dropGameServer(this, this.serverIdentifier);
                 hub.notifyGameClientsDrop(this.serverIdentifier);
             }
@@ -182,7 +173,6 @@ public class ClientHandle extends Thread{
                 }
                 else{
                     byte b = in.readByte();
-                    System.out.println("ID IS " + b);
                     MessageType mssgType = byteToMssg(b);
                     
                     byte[] data;
@@ -210,10 +200,8 @@ public class ClientHandle extends Thread{
                 }
             } catch (EOFException e){
                 endHandle();
-                System.out.println("SOME SHIT HEPAEIJOIFEJN");
             } catch (SocketException e){
                 endHandle();
-                System.out.println("socket err");
             } catch (Exception e) {
                 System.out.println("HANDLE INTERRUPTED " + e.getClass().getCanonicalName());
             }

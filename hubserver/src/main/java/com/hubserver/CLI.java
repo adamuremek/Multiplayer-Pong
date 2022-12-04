@@ -5,7 +5,7 @@ import java.io.IOException;
 //ASCII ART SHIT https://textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Big&text=PONG%0AGame%20Server
 
 public class CLI extends Thread{
-    private static final int REFRESH_RATE = 10000;
+    private static final int REFRESH_RATE = 5000;
     private HubData hub;
     private boolean isActive;
 

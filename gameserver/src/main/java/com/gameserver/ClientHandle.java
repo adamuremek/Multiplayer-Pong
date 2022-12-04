@@ -29,7 +29,6 @@ public class ClientHandle extends Thread {
         this.start();
     }
 
-    
     public void endHandle(){
         this.isActive = false;
         GameServer.gameData.clientDisconnect(playerIdentifier);

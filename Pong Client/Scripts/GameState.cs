@@ -31,18 +31,6 @@ public class GameState : Node2D
 	private string p1Name = "";
 	private string p2Name = "";
 
-	//player identifier - 0
-	//p1 name - 1-30
-	//p2 name - 31-60
-	//p1 score - 61-64
-	//p1 score - 65-68
-	//p1 color - 69-71
-	//p2 color - 72-74
-	//p1 paddle height - 75-78
-	//p2 paddle height - 79-82
-	//ball x pos - 83-86
-	//ball y pos - 87-90
-	//Server message - 91-150
 
 	public override void _Ready()
 	{
@@ -93,29 +81,40 @@ public class GameState : Node2D
 	private void leftPaddleHit(object area)
 	{
 		Area2D a = area as Area2D;
-		if(a.Name.Equals("Ball"))
+        if (a.Name.Equals("Ball"))
+        {
+			paddle1Hit.Stop();
 			paddle1Hit.Play();
+		}
+			
 	}
 
 	private void rightPaddleHit(object area)
 	{
 		Area2D a = area as Area2D;
 		if (a.Name.Equals("Ball"))
+        {
+			paddle2Hit.Stop();
 			paddle2Hit.Play();
+        }
+			
 	}
 
 	private void topBoundHit(object area)
 	{
+		topHit.Stop();
 		topHit.Play();
 	}
 
 	private void bottomBoundHit(object area)
 	{
+		bottomHit.Stop();
 		bottomHit.Play();
 	}
 
 	private void scoreHit(object area)
 	{
+		score.Stop();
 		score.Play();
 	}
 

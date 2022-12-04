@@ -10,8 +10,11 @@ config_version=4
 
 [application]
 
-config/name="Pong Client"
+config/name="Pong"
 run/main_scene="res://Scenes/Main.tscn"
+boot_splash/show_image=false
+config/icon="res://Assets/icon.png"
+config/windows_native_icon="res://Assets/icon.ico"
 
 [display]
 

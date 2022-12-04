@@ -1,9 +1,13 @@
 package com.gameserver;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.net.InetAddress;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
 import java.nio.ByteBuffer;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import com.gameserver.Paddle.Side;
 
@@ -31,7 +35,6 @@ public class GameData extends Thread{
     }
 
     public void clientJoin(byte[] clientData, InetAddress clientAddr, int clientPort) {
-        System.out.println("PLAYER JOIN");
         //Deserialize the data
         PlayerState ps = new PlayerState(clientData);
 
@@ -43,7 +46,6 @@ public class GameData extends Thread{
             paddle2.movePaddle(ps.paddlePosY);
         setMessage(String.format("Player %s has connected.", ps.playerName));
         
-
         //Update server info
         GameServer.serverInfo.player1Name = ps.playerIdentifier == (byte)1 ? ps.playerName : GameServer.serverInfo.player1Name;
         GameServer.serverInfo.player2Name = ps.playerIdentifier == (byte)2 ? ps.playerName : GameServer.serverInfo.player2Name;
@@ -69,8 +71,22 @@ public class GameData extends Thread{
         ClientHandle disconnectedClient = gameClients[playerIdentifier - 1];
         //Update game data
         gameClients[playerIdentifier - 1] = null;
+
+        if(disconnectedClient.playerIdentifier == (byte)1){
+            if(gameClients[1] != null)
+                addScoreToFile(String.format("%s's Score: %d %s's Score: %d\n", disconnectedClient.getName(), player1Score, gameClients[1].playerName, player2Score));
+            paddle1.movePaddle(240);
+        }
+            
+        if(disconnectedClient.playerIdentifier == (byte)2){
+            if(gameClients[0] != null)
+                addScoreToFile(String.format("%s's Score: %d %s's Score: %d\n", gameClients[0].playerName, player1Score, disconnectedClient.getName(), player2Score));
+            paddle2.movePaddle(240);
+        }
+        
         player1Score = 0;
         player2Score = 0;
+
         setMessage(String.format("Player %s has disconnected.", disconnectedClient.playerName));
 
         //Update server info
@@ -79,13 +95,7 @@ public class GameData extends Thread{
         GameServer.serverInfo.player1Color = disconnectedClient.playerIdentifier == (byte)1 ? new byte[] {(byte)0, (byte)0, (byte)0} : GameServer.serverInfo.player1Color;
         GameServer.serverInfo.player2Color = disconnectedClient.playerIdentifier == (byte)2 ? new byte[] {(byte)0, (byte)0, (byte)0} : GameServer.serverInfo.player2Color;
 
-        if(disconnectedClient.playerIdentifier == (byte)1){
-            paddle1.movePaddle(240);
-        }
-            
-        if(disconnectedClient.playerIdentifier == (byte)2){
-            paddle2.movePaddle(240);
-        }
+        
 
         GameServer.serverInfo.isFull = playersInSession() == gameClients.length;
         GameServer.hub.sendModify();
@@ -210,6 +220,18 @@ public class GameData extends Thread{
         }
 
         return -1;
+    }
+
+    public void addScoreToFile(String s){
+        try {
+            File scores = new File("score.txt");
+            scores.createNewFile();
+            FileOutputStream fos = new FileOutputStream(scores, true);
+            fos.write(s.getBytes(StandardCharsets.US_ASCII));
+            fos.close();
+        } catch (Exception e) {
+            System.out.println("Couldnt write to file");
+        }
     }
 
     /**

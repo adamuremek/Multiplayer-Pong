@@ -75,8 +75,11 @@ public class GameProcess extends Thread {
         else if(!ball.hasStarted && GameServer.serverInfo.isFull){
             ball.tickCooldown(deltaTime);
             return;
-        } else if (!GameServer.serverInfo.isFull)
+        } else if (!GameServer.serverInfo.isFull){
             ball.reset();
+            return;
+        }
+            
 
         //Score and reset ball on right goal
         if (collidedWithLeftOrRight(ball, X_BOUNDS)) {
@@ -115,7 +118,6 @@ public class GameProcess extends Thread {
 
 
         ball.position =  Vector2.add(ball.position, Vector2.scalarMulitply(ball.direction, ball.getSpeed()));
-        //System.out.println(ball.position);
     }
 
     public void tick() {
