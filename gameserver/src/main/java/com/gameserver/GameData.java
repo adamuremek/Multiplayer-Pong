@@ -12,10 +12,10 @@ public class GameData extends Thread{
     private static final short SREVER_MSSG_SIZE = 60;
     public ClientHandle[] gameClients = new ClientHandle[2];
     public Ball ball = new Ball();
-    public Paddle p1 = new Paddle(Side.LEFT);
-    public Paddle p2 = new Paddle(Side.RIGHT);
-    public int p1score = 0;
-    public int p2score = 0;
+    public Paddle paddle1 = new Paddle(Side.LEFT);
+    public Paddle paddle2 = new Paddle(Side.RIGHT);
+    public int player1Score = 0;
+    public int player2Score = 0;
     private String globalMssg;
 
     private void setMessage(String message){
@@ -34,9 +34,9 @@ public class GameData extends Thread{
         //Create a new client handle and update game data
         gameClients[clientData[0] - 1] = new ClientHandle(clientAddr, clientPort, ps.playerIdentifier, ps.playerName, ps.playerColor);
         if(ps.playerIdentifier == (byte)1)
-            p1.movePaddle(ps.paddlePosY);
+            paddle1.movePaddle(ps.paddlePosY);
         else
-            p2.movePaddle(ps.paddlePosY);
+            paddle2.movePaddle(ps.paddlePosY);
         setMessage(String.format("Player %s has connected.", ps.playerName));
         
 
@@ -53,9 +53,9 @@ public class GameData extends Thread{
         //Deserialize playerstate
         PlayerState ps = new PlayerState(clientData);
         if(ps.playerIdentifier == (byte)1)
-            p1.movePaddle(ps.paddlePosY);
+            paddle1.movePaddle(ps.paddlePosY);
         else
-            p2.movePaddle(ps.paddlePosY);
+            paddle2.movePaddle(ps.paddlePosY);
 
         gameClients[ps.playerIdentifier - 1].resetTimeout();
     }
@@ -65,8 +65,8 @@ public class GameData extends Thread{
         ClientHandle disconnectedClient = gameClients[playerIdentifier - 1];
         //Update game data
         gameClients[playerIdentifier - 1] = null;
-        p1score = 0;
-        p2score = 0;
+        player1Score = 0;
+        player2Score = 0;
         setMessage(String.format("Player %s has disconnected.", disconnectedClient.playerName));
 
         //Update server info
@@ -107,14 +107,14 @@ public class GameData extends Thread{
         counter += NAME_SIZE;
 
         //Serialize p1 score
-        bytes = ByteBuffer.allocate(4).putInt(p1score).array();
+        bytes = ByteBuffer.allocate(4).putInt(player1Score).array();
         for(int i = 0; i < bytes.length; i++){
             data[counter + i] = bytes[i];
         }
         counter += 4;
 
         //Serialize p2 score
-        bytes = ByteBuffer.allocate(4).putInt(p2score).array();
+        bytes = ByteBuffer.allocate(4).putInt(player2Score).array();
         for(int i = 0; i < bytes.length; i++){
             data[counter + i] = bytes[i];
         }
@@ -135,14 +135,14 @@ public class GameData extends Thread{
         counter += 3;
 
         //Serialize p1 paddle height
-        bytes = ByteBuffer.allocate(4).putFloat(p1.center.y).array();
+        bytes = ByteBuffer.allocate(4).putFloat(paddle1.center.y).array();
         for(int i = 0; i < bytes.length; i++){
             data[counter + i] = bytes[i];
         }
         counter += 4;
 
         //Serialize p2 paddle height
-        bytes = ByteBuffer.allocate(4).putFloat(p2.center.y).array();
+        bytes = ByteBuffer.allocate(4).putFloat(paddle2.center.y).array();
         for(int i = 0; i < bytes.length; i++){
             data[counter + i] = bytes[i];
         }
