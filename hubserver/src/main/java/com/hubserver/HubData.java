@@ -43,6 +43,8 @@ public class HubData {
         ServerInfo serverInfo = new ServerInfo();
         serverInfo.deserialize(serverInfoData);
 
+        System.out.println(serverInfo.toString());
+
         //Add server info data to serer list
         serverList.put(serverIdentifier, serverInfo);
 
@@ -74,7 +76,7 @@ public class HubData {
 
     public void sendServerListToClient(ClientHandle gameClient){
         for(ServerInfo serverInfo : serverList.values()){
-            gameClient.send(serverInfo.serialize(), MessageType.SERVER_LIST);
+            gameClient.send(serverInfo.serialize(), MessageType.ADD_GAMESERVER);
         }
     }
 

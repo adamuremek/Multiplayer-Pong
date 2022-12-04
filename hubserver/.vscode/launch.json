@@ -14,7 +14,7 @@
             "type": "java",
             "name": "Launch HubServer",
             "request": "launch",
-            "args": "port:2000",
+            "args": "port:9352",
             "mainClass": "com.hubserver.HubServer",
             "projectName": "hubserver"
         }

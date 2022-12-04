@@ -3,7 +3,7 @@ package com.gameserver;
 import java.io.IOException;
 
 public class CLI extends Thread{
-    private static final int REFRESH_RATE = 5000;
+    private static final int REFRESH_RATE = 10000;
     private boolean isActive;
 
     public CLI(){
@@ -34,8 +34,8 @@ public class CLI extends Thread{
     private String getStats(){
         String out = "";
         out += String.format("Server Hosted on Port: %d\n\n", GameServer.serverInfo.serverPort) + "\n";
-        out += GameServer.gameData.gameClients[0] != null ? String.format("Player 1: %s || SCORE: %d\n", GameServer.gameData.gameClients[0].playerName, GameServer.gameData.p1score) : String.format("Player 1: %s || SCORE: %d\n", "", GameServer.gameData.p1score);
-        out += GameServer.gameData.gameClients[1] != null ? String.format("Player 2: %s || SCORE: %d\n", GameServer.gameData.gameClients[1].playerName, GameServer.gameData.p2score) : String.format("Player 2: %s || SCORE: %d\n", "", GameServer.gameData.p2score);
+        out += GameServer.gameData.gameClients[0] != null ? String.format("Player 1: %s || SCORE: %d\n", GameServer.gameData.gameClients[0].playerName, GameServer.gameData.player1Score) : String.format("Player 1: %s || SCORE: %d\n", "", GameServer.gameData.player1Score);
+        out += GameServer.gameData.gameClients[1] != null ? String.format("Player 2: %s || SCORE: %d\n", GameServer.gameData.gameClients[1].playerName, GameServer.gameData.player2Score) : String.format("Player 2: %s || SCORE: %d\n", "", GameServer.gameData.player2Score);
         return out;
     }
 
@@ -57,9 +57,9 @@ public class CLI extends Thread{
     public void run(){
         try {
             while(this.isActive){
-                clearConsole();
-                System.out.println(String.format("%s\n\n\n", generateHeader()));
-                System.out.println(getStats());
+                //clearConsole();
+                //System.out.println(String.format("%s\n\n\n", generateHeader()));
+                //System.out.println(getStats());
 
                 Thread.sleep(REFRESH_RATE);
             }

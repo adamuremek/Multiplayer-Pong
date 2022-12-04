@@ -1,5 +1,6 @@
 package com.gameserver;
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.io.*;
 
 public class HubServerHandle extends Thread{
@@ -39,11 +40,23 @@ public class HubServerHandle extends Thread{
         //Send an identifier heartbeat to the hub server
         out.writeByte(MessageType.IDENTIFIER_GAME_SERVER.intValue());
 
+
         //Wait for unique server identifier from hub server
-        GameServer.serverInfo.identifier = in.readInt();
+        byte mssg = in.readByte();
+        byte[] buf = new byte[in.readInt()];
+        in.read(buf);
+
+        GameServer.serverInfo.identifier = ByteBuffer.wrap(buf).getInt();
+        System.out.println(GameServer.serverInfo.identifier);
 
         //Send current server state
         byte[] serverInfo = GameServer.serverInfo.serialize();
+        String o = "";
+        for(byte b : serverInfo){
+            o += b + " ";
+        }
+        //System.out.println(o);
+        
         out.writeByte(MessageType.ADD_GAMESERVER.intValue());
         out.writeInt(serverInfo.length);
         out.write(serverInfo);

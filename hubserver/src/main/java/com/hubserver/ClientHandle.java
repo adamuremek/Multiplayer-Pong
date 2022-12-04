@@ -42,7 +42,7 @@ public class ClientHandle extends Thread{
         //Setup socket
         this.sock = sock;
         this.hub = hub;
-        this.serverIdentifier = 0;
+        this.serverIdentifier = -1;
         this.isActive = true;
         out = new DataOutputStream(sock.getOutputStream());
         in = new DataInputStream(sock.getInputStream());
@@ -62,6 +62,7 @@ public class ClientHandle extends Thread{
             //If the first byte is 1, its a game client
             case IDENTIFIER_GAME_CLIENT:
                 System.out.println("NEW CLENT");
+                this.serverIdentifier = 0;
                 hub.addGameClient(this);
                 hub.sendServerListToClient(this);
                 break;
@@ -70,9 +71,12 @@ public class ClientHandle extends Thread{
                 System.out.println("NEW SERVER");
                 hub.addGameServer(this);
                 this.serverIdentifier = hub.generateIdentifier();
+                System.out.println("IDENTIFIER = " + this.serverIdentifier);
                 //Generate identifier and send it to client
-                if(this.serverIdentifier != -1)
+                if(this.serverIdentifier != -1){
+                    System.out.println("SENT IDENTIFIER");
                     send(ByteBuffer.allocate(4).putInt(this.serverIdentifier).array(), MessageType.SET_IDENTIFIER);
+                }
                 else
                     endHandle();
                 break;
@@ -81,6 +85,8 @@ public class ClientHandle extends Thread{
                 System.out.println(mssgType);
                 break;
         }
+
+        System.out.println("CONSTRUCTION DONE");
     }
 
     private MessageType byteToMssg(byte b){
@@ -97,6 +103,10 @@ public class ClientHandle extends Thread{
                 return MessageType.MODIFY_GAMESERVER;
             case (byte)6:
                 return MessageType.DROP_GAMESERVER;
+            case (byte)7:
+                return MessageType.GET_SERVER_LIST;
+            case (byte)8:
+                return MessageType.SERVER_LIST;
             default:
                 return MessageType.NONE;
         }
@@ -116,9 +126,11 @@ public class ClientHandle extends Thread{
         } finally{
             if(serverIdentifier == 0)
                 hub.dropGameClient(this);
-            else
+            else{
+                System.out.println("CLIENT DROPPED :(");
                 hub.dropGameServer(this, this.serverIdentifier);
                 hub.notifyGameClientsDrop(this.serverIdentifier);
+            }
         }
     }
 
@@ -151,10 +163,13 @@ public class ClientHandle extends Thread{
     public void run(){
         while(this.isActive){
             try {
-                 //Server identifier of 0 implies a game client, otherwise its a game server
-                 if(serverIdentifier == 0){
-                    MessageType mssgType = byteToMssg(in.readByte());
-
+                if(serverIdentifier == -1)
+                    continue;
+                //Server identifier of 0 implies a game client, otherwise its a game server
+                else if(serverIdentifier == 0){
+                    byte b = in.readByte();
+                    System.out.println("CLEINT MSSG: " + b);
+                    MessageType mssgType = byteToMssg(b);
                     switch(mssgType){
                         //Game client requests server list
                         case GET_SERVER_LIST:
@@ -166,7 +181,10 @@ public class ClientHandle extends Thread{
                     }
                 }
                 else{
-                    MessageType mssgType = byteToMssg(in.readByte());
+                    byte b = in.readByte();
+                    System.out.println("ID IS " + b);
+                    MessageType mssgType = byteToMssg(b);
+                    
                     byte[] data;
                     switch(mssgType){
                         //Game server info is new

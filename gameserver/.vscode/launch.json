@@ -14,6 +14,7 @@
             "type": "java",
             "name": "Launch GameServer",
             "request": "launch",
+            "args": "port:6642 addr:127.0.0.1 serverName:TEST hubPort:9352 hubAddr:127.0.0.1",
             "mainClass": "com.gameserver.GameServer",
             "projectName": "gameserver"
         }

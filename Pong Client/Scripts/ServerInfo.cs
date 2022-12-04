@@ -28,7 +28,7 @@ public class ServerInfo : Node
 	{
 		//Load the server list module
 		serverInfoNode = GD.Load<PackedScene>("res://Scenes/ServerInfo.tscn").Instance();
-		Global.serverList.AddChild(serverInfoNode);
+		
 
 		//Populate references
 		lblServerName = serverInfoNode.GetChild<Label>(0);
@@ -39,11 +39,12 @@ public class ServerInfo : Node
 
 		//Set server info data
 		updateData(data);
+		Global.serverList.AddChild(serverInfoNode);
 	}
 
 	public static int getIdentifier(byte[] data)
 	{
-		return BitConverter.ToInt32(data, 356);
+		return BitConverter.ToInt32(new byte[] { data[359], data[358], data[357], data[356] }, 0);
 	}
 
 	public void updateData(byte[] data)
@@ -53,9 +54,11 @@ public class ServerInfo : Node
 		lblServerName.Text = serverName;
 		lblP1Name.Text = player1Name;
 		lblP2Name.Text = player2Name;
-		lblP2Name.AddColorOverride("font_color", player1Color);
-		lblP1Name.AddColorOverride("font_color", player2Color);
+		lblP1Name.AddColorOverride("font_color", player1Color);
+		lblP2Name.AddColorOverride("font_color", player2Color);
 		btnJoin.Disabled = isFull;
+
+		GD.Print(player1Color);
 	}
 
 	public void remove()
@@ -71,14 +74,13 @@ public class ServerInfo : Node
 		player1Color = new Color(data[90] / 255f, data[91] / 255f, data[92] / 255f);
 		player2Color = new Color(data[93] / 255f, data[94] / 255f, data[95] / 255f);
 		serverAddr = Encoding.ASCII.GetString(data, 96, 256);
-		serverPort = BitConverter.ToInt32(data, 352);
-		identifier = BitConverter.ToInt32(data, 356);
+		serverPort = BitConverter.ToInt32(new byte[] { data[355], data[354], data[353], data[352] }, 0);
+		identifier = BitConverter.ToInt32(new byte[] { data[359], data[358], data[357], data[356] }, 0);
 		isFull = BitConverter.ToBoolean(data, 360);
 	}
 
 	public void joinBtnDown()
 	{
 		Global.gs.connect(serverAddr, serverPort);
-		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 }

@@ -63,6 +63,12 @@ public class Menu : Node2D
 	private void goBack()
 	{
 		Global.hub.endHandle();
+		foreach (KeyValuePair<int, ServerInfo> entry in Global.gameServers)
+		{
+			entry.Value.remove();
+		}
+		Global.gameServers.Clear();
+
 		Global.loadMenu1();
 	}
 

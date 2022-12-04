@@ -9,6 +9,7 @@ public class GameServer {
     public static ClientListener cl;
     public static HubServerHandle hub;
     public static CLI cli;
+    public static GameProcess gp;
     static HashMap<String, String> argTable;
 
 
@@ -18,6 +19,7 @@ public class GameServer {
             hub.endHandle();
             cl.endListener();
             cli.endCLI();
+            gp.endGameProcess();
             System.out.println("CLEANUP DONE");
         }
     }
@@ -59,10 +61,10 @@ public class GameServer {
         serverInfo.serverAddr = argTable.get("addr");
         serverInfo.serverPort = Integer.parseInt(argTable.get("port"));
 
+        cli = new CLI();
         cl = new ClientListener(serverInfo.serverPort);
         hub = new HubServerHandle(argTable.get("hubAddr"), Integer.parseInt(argTable.get("hubPort")));
-        cli = new CLI();
-
+        gp = new GameProcess();
 
         //Shutdown hook to clean up ports and other nonsense
         Runtime.getRuntime().addShutdownHook(new Cleanup());

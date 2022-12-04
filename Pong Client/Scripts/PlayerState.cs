@@ -43,6 +43,7 @@ public class PlayerState
 
         //Serialize paddle x position
         bytes = BitConverter.GetBytes(paddlePosX);
+        Array.Reverse(bytes);
         for (int i = 0; i < bytes.Length; i++)
         {
             data[counter + i] = bytes[i];
@@ -51,6 +52,7 @@ public class PlayerState
 
         //Serialize paddle y position
         bytes = BitConverter.GetBytes(paddlePosY);
+        Array.Reverse(bytes);
         for (int i = 0; i < bytes.Length; i++)
         {
             data[counter + i] = bytes[i];

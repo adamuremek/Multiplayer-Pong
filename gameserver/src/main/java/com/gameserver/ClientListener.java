@@ -11,7 +11,11 @@ public class ClientListener extends Thread {
     byte[] buf = new byte[PlayerState.PLAYER_STATE_BUF_SIZE];
 
     public ClientListener(int port) throws IOException {
+        System.out.println("CONSTRUCT");
         this.sock = new DatagramSocket(port);
+        this.isActive = true;
+        this.start();
+        System.out.println("SCOKET MADe");
     }
 
     private void attemptHeartbeat(DatagramPacket incomingClient){
@@ -23,7 +27,27 @@ public class ClientListener extends Thread {
                 sock.send(heartbeatPckt);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("HEARTBEAT FAILED");
+        }
+    }
+
+    public void updateClients() {
+        try {
+            byte[] data = GameServer.gameData.serializeCurrentState((byte) 1);
+            if (GameServer.gameData.gameClients[0] != null){
+                DatagramPacket packet = new DatagramPacket(data, data.length, GameServer.gameData.gameClients[0].clientAddr, GameServer.gameData.gameClients[0].clientPort);
+                sock.send(packet);
+            }
+
+            data[0] = (byte)2;
+            if (GameServer.gameData.gameClients[1] != null){
+                DatagramPacket packet = new DatagramPacket(data, data.length, GameServer.gameData.gameClients[1].clientAddr, GameServer.gameData.gameClients[1].clientPort);
+                sock.send(packet);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -81,6 +105,7 @@ public class ClientListener extends Thread {
                 }  
 
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("LISTENER ENCOUNTERED AN ERROR");
             }
 

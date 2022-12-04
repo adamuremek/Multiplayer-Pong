@@ -72,6 +72,7 @@ public class HubServerHandle
     public void requestServerList()
     {
         byte[] reqMssg = { (byte)MessageType.GET_SERVER_LIST };
+        GD.Print(reqMssg[0]);
         _sock.Send(reqMssg);
     }
 
@@ -111,6 +112,7 @@ public class HubServerHandle
         //Get identifier
         byte[] buff = new byte[4];
         _sock.Receive(buff, buff.Length, SocketFlags.None);
+        Array.Reverse(buff);
         int identifier = BitConverter.ToInt32(buff, 0);
 
         //Remove server from list
@@ -127,10 +129,12 @@ public class HubServerHandle
             {
                 byte[] mssgType = new byte[1];
                 _sock.Receive(mssgType, mssgType.Length, SocketFlags.None);
-
+                GD.Print(mssgType[0]);
+                GD.Print("DESIRED: " + ((byte)MessageType.ADD_GAMESERVER).ToString());
                 switch (mssgType[0])
                 {
                     case (byte)MessageType.ADD_GAMESERVER:
+                        GD.Print("ADDING");
                         gameserverAdd();
                         break;
                     case (byte)MessageType.MODIFY_GAMESERVER:
@@ -141,8 +145,9 @@ public class HubServerHandle
                         break;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                GD.Print(e.StackTrace);
                 GD.Print("Socket broke");
             }
         }
