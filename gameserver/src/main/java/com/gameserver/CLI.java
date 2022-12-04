@@ -33,6 +33,7 @@ public class CLI extends Thread{
 
     private String getStats(){
         String out = "";
+        out += String.format("Server Name: %s", GameServer.serverInfo.serverName) + "\n";
         out += String.format("Server Hosted on Port: %d\n\n", GameServer.serverInfo.serverPort) + "\n";
         out += GameServer.gameData.gameClients[0] != null ? String.format("Player 1: %s || SCORE: %d\n", GameServer.gameData.gameClients[0].playerName, GameServer.gameData.player1Score) : String.format("Player 1: %s || SCORE: %d\n", "", GameServer.gameData.player1Score);
         out += GameServer.gameData.gameClients[1] != null ? String.format("Player 2: %s || SCORE: %d\n", GameServer.gameData.gameClients[1].playerName, GameServer.gameData.player2Score) : String.format("Player 2: %s || SCORE: %d\n", "", GameServer.gameData.player2Score);
