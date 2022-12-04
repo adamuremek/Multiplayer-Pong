@@ -9,7 +9,7 @@ public class Paddle {
 
     private Side side;
 
-    private Vector2 center;
+    public Vector2 center;
     private Vector2 a;
     private Vector2 b;
     private Vector2 c;

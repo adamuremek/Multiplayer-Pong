@@ -67,6 +67,15 @@ public class ClientListener extends Thread {
                         else
                             GameServer.gameData.clientJoin(data,  incomingPlayerData.getAddress(), incomingPlayerData.getPort());
                         break;
+
+                    case (byte) 3:
+                        //Drop player 1
+                        if(GameServer.gameData.gameClients[0] != null)
+                            GameServer.gameData.gameClients[0].endHandle();
+                    case (byte) 4:
+                    //Drop player 2
+                    if(GameServer.gameData.gameClients[1] != null)
+                        GameServer.gameData.gameClients[1].endHandle();
                     default:
                         break;
                 }  

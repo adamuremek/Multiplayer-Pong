@@ -10,13 +10,15 @@ public class ServerInfo{
     public String serverName = "";
     public String player1Name = "";
     public String player2Name = "";
+    public byte[] player1Color = {0,0,0};
+    public byte[] player2Color = {0,0,0};
     public String serverAddr = "";
     public int serverPort = 0;
     public int identifier = 0;
     public boolean isFull = false;
 
     public byte[] serialize(){
-        byte[] serializedData = new byte[355];
+        byte[] serializedData = new byte[361];
         int counter = 0;
 
         //Serialize server name
@@ -49,6 +51,18 @@ public class ServerInfo{
         }
         counter += NAME_SIZE;
 
+        //Serialize player 1 color
+        for(int i = 0; i < player1Color.length; i++){
+            serializedData[counter + i] = player1Color[i];
+        }
+        counter += 3;
+
+        //Serialize player 2 color
+        for(int i = 0; i < player2Color.length; i++){
+            serializedData[counter + i] = player2Color[i];
+        }
+        counter += 3;
+        
         //Serialize server address
         bytes = serverAddr.getBytes(StandardCharsets.US_ASCII);
         for(int i = 0; i < ADDR_SIZE; i++){
@@ -83,10 +97,12 @@ public class ServerInfo{
         this.serverName = new String(Arrays.copyOfRange(data, 0, 30), StandardCharsets.US_ASCII);
         this.player1Name = new String(Arrays.copyOfRange(data, 30, 60), StandardCharsets.US_ASCII);
         this.player2Name = new String(Arrays.copyOfRange(data, 60, 90), StandardCharsets.US_ASCII);
-        this.serverAddr = new String(Arrays.copyOfRange(data, 90, 346), StandardCharsets.US_ASCII);
-        this.serverPort = ByteBuffer.wrap(Arrays.copyOfRange(data, 346, 350)).getInt();
-        this.identifier = ByteBuffer.wrap(Arrays.copyOfRange(data, 350, 354)).getInt();
-        this.isFull = data[354] == (byte)1 ? true : false;  
+        this.player1Color = Arrays.copyOfRange(data, 90, 93);
+        this.player2Color = Arrays.copyOfRange(data, 93, 96);
+        this.serverAddr = new String(Arrays.copyOfRange(data, 96, 352), StandardCharsets.US_ASCII);
+        this.serverPort = ByteBuffer.wrap(Arrays.copyOfRange(data, 352, 356)).getInt();
+        this.identifier = ByteBuffer.wrap(Arrays.copyOfRange(data, 356, 360)).getInt();
+        this.isFull = data[360] == (byte)1 ? true : false;  
     }
 
     @Override

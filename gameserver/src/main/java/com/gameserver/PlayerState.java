@@ -21,10 +21,4 @@ public class PlayerState {
         this.paddlePosX = ByteBuffer.wrap(Arrays.copyOfRange(playerStateData, 34, 38)).getFloat();
         this.paddlePosY = ByteBuffer.wrap(Arrays.copyOfRange(playerStateData, 38, 42)).getFloat();
     }
-
-    public static byte[] serialize(){
-        //TODO
-        return null;
-    }   
-
 }

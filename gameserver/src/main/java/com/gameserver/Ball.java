@@ -7,7 +7,7 @@ public class Ball {
     public static final float SPEED_RATE = 1 / 8f;
 
     private Vector2 direction;
-    private Vector2 position;
+    public Vector2 position;
     private float speed;
 
     public Ball() {

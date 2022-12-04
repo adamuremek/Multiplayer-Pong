@@ -1,9 +1,15 @@
 package com.gameserver;
 
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
+import java.nio.ByteBuffer;
+
 import com.gameserver.Paddle.Side;
 
 public class GameData extends Thread{
+    private static final short GAME_STATE_SIZE = 151;
+    private static final short NAME_SIZE = 30;
+    private static final short SREVER_MSSG_SIZE = 60;
     public ClientHandle[] gameClients = new ClientHandle[2];
     public Ball ball = new Ball();
     public Paddle p1 = new Paddle(Side.LEFT);
@@ -37,6 +43,8 @@ public class GameData extends Thread{
         //Update server info
         GameServer.serverInfo.player1Name = ps.playerIdentifier == (byte)1 ? ps.playerName : GameServer.serverInfo.player1Name;
         GameServer.serverInfo.player2Name = ps.playerIdentifier == (byte)2 ? ps.playerName : GameServer.serverInfo.player2Name;
+        GameServer.serverInfo.player1Color = ps.playerIdentifier == (byte)1 ? ps.playerColor : GameServer.serverInfo.player1Color;
+        GameServer.serverInfo.player2Color = ps.playerIdentifier == (byte)2 ? ps.playerColor : GameServer.serverInfo.player2Color;
         GameServer.serverInfo.isFull = playersInSession() == gameClients.length;
         GameServer.hub.sendModify();
     }
@@ -64,13 +72,106 @@ public class GameData extends Thread{
         //Update server info
         GameServer.serverInfo.player1Name = disconnectedClient.playerIdentifier == (byte)1 ? "" : GameServer.serverInfo.player1Name;
         GameServer.serverInfo.player2Name = disconnectedClient.playerIdentifier == (byte)2 ? "" : GameServer.serverInfo.player2Name;
+        GameServer.serverInfo.player1Color = disconnectedClient.playerIdentifier == (byte)1 ? new byte[] {(byte)0, (byte)0, (byte)0} : GameServer.serverInfo.player1Color;
+        GameServer.serverInfo.player2Color = disconnectedClient.playerIdentifier == (byte)2 ? new byte[] {(byte)0, (byte)0, (byte)0} : GameServer.serverInfo.player2Color;
         GameServer.serverInfo.isFull = playersInSession() == gameClients.length;
         GameServer.hub.sendModify();
     }
 
     public byte[] serializeCurrentState(byte playerIdentifier){
-        //TODO
-        return null;
+        byte[] data = new byte[GAME_STATE_SIZE];
+        int counter = 0;
+
+        //Serialize playerIdentifier
+        data[0] = playerIdentifier;
+        counter += 1;
+
+        //Serialize p1 name
+        byte[] bytes = gameClients[0] == null ? "".getBytes(StandardCharsets.US_ASCII) : gameClients[0].playerName.getBytes(StandardCharsets.US_ASCII);
+        for(int i = 0; i < NAME_SIZE; i++){
+            if(i < bytes.length)
+                data[counter + i] = bytes[i];
+            else
+                data[counter + i] = 0;
+        }
+        counter += NAME_SIZE;
+
+        //Serialize p2 name
+        bytes = gameClients[1] == null ? "".getBytes(StandardCharsets.US_ASCII) : gameClients[1].playerName.getBytes(StandardCharsets.US_ASCII);
+        for(int i = 0; i < NAME_SIZE; i++){
+            if(i < bytes.length)
+                data[counter + i] = bytes[i];
+            else
+                data[counter + i] = 0;
+        }
+        counter += NAME_SIZE;
+
+        //Serialize p1 score
+        bytes = ByteBuffer.allocate(4).putInt(p1score).array();
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 4;
+
+        //Serialize p2 score
+        bytes = ByteBuffer.allocate(4).putInt(p2score).array();
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 4;
+
+        //Serialize p1 color
+        bytes = gameClients[0] == null ? new byte[]{0,0,0} : gameClients[0].playerColor;
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 3;
+
+        //Serialize p2 color
+        bytes = gameClients[1] == null ? new byte[]{0,0,0} : gameClients[1].playerColor;
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 3;
+
+        //Serialize p1 paddle height
+        bytes = ByteBuffer.allocate(4).putFloat(p1.center.y).array();
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 4;
+
+        //Serialize p2 paddle height
+        bytes = ByteBuffer.allocate(4).putFloat(p2.center.y).array();
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 4;
+
+        //Serialize ball x pos
+        bytes = ByteBuffer.allocate(4).putFloat(ball.position.x).array();
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 4;
+
+        //Serialize ball y pos
+        bytes = ByteBuffer.allocate(4).putFloat(ball.position.y).array();
+        for(int i = 0; i < bytes.length; i++){
+            data[counter + i] = bytes[i];
+        }
+        counter += 4;
+
+        //Serialzie server message
+        bytes = globalMssg.getBytes(StandardCharsets.US_ASCII);
+        for(int i = 0; i < SREVER_MSSG_SIZE; i++){
+            if(i < bytes.length)
+                data[counter + i] = bytes[i];
+            else
+                data[counter + i] = 0;
+        }
+
+        return data;
     }
 
     public boolean playerExists(byte playerIdentifier){
