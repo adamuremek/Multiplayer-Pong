@@ -13,6 +13,7 @@ public class ClientListener extends Thread{
 
     public ClientListener(int serverPort, HubData hub) throws IOException{
         this.serverSock = new ServerSocket(serverPort);
+        System.out.println(serverSock.getLocalSocketAddress());
         this.hub = hub;
         this.isActive = true;
         this.start();

@@ -9,7 +9,8 @@ using System.Net.Sockets;
 
 public class HubServerHandle
 {
-    private Socket _sock;
+    private TcpClient _sock;
+    private NetworkStream stream;
     public bool isActive { get; private set; } = false;
 
     public enum MessageType : byte
@@ -35,18 +36,11 @@ public class HubServerHandle
     {
         try
         {
-            IPHostEntry host = Dns.GetHostEntry(serverAddr);
-            IPAddress ip = host.AddressList[0];
-            IPEndPoint ep = new IPEndPoint(ip, port);
+            _sock = new TcpClient();
+            _sock.Connect(serverAddr, port);
+            stream = _sock.GetStream();
 
-            _sock = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-            _sock.Connect(ep);
-
-
-            byte[] identifier = { (byte)MessageType.IDENTIFIER_GAME_CLIENT };
-            _sock.Send(identifier);
-
+            stream.WriteByte((byte)MessageType.IDENTIFIER_GAME_CLIENT);
             isActive = true;
 
             System.Threading.Thread t = new System.Threading.Thread(new ThreadStart(listenerCallback));
@@ -71,23 +65,24 @@ public class HubServerHandle
 
     public void requestServerList()
     {
-        byte[] reqMssg = { (byte)MessageType.GET_SERVER_LIST };
-        GD.Print(reqMssg[0]);
-        _sock.Send(reqMssg);
+        stream.WriteByte((byte)MessageType.GET_SERVER_LIST);
     }
 
     void gameserverAdd()
     {
         //Get data size
+
         byte[] buff = new byte[4];
-        _sock.Receive(buff, buff.Length, SocketFlags.None);
+        stream.Read(buff, 0, buff.Length);
+        Array.Reverse(buff);
         int dataSize = BitConverter.ToInt32(buff, 0);
 
         //Get data
         buff = new byte[dataSize];
-        _sock.Receive(buff, buff.Length, SocketFlags.None);
+        stream.Read(buff, 0, buff.Length);
 
         ServerInfo newInfo = new ServerInfo(buff);
+        GD.Print("IDENTIFIER: " + newInfo.identifier);
         Global.gameServers.Add(newInfo.identifier, newInfo);
     }
 
@@ -95,12 +90,13 @@ public class HubServerHandle
     {
         //Get data size
         byte[] buff = new byte[4];
-        _sock.Receive(buff, buff.Length, SocketFlags.None);
+        stream.Read(buff, 0, buff.Length);
+        Array.Reverse(buff);
         int dataSize = BitConverter.ToInt32(buff, 0);
 
         //Get data
         buff = new byte[dataSize];
-        _sock.Receive(buff, buff.Length, SocketFlags.None);
+        stream.Read(buff, 0, buff.Length);
 
         //Modify the corresponding server info
         ServerInfo currentInfo = Global.gameServers[ServerInfo.getIdentifier(buff)];
@@ -111,7 +107,7 @@ public class HubServerHandle
     {
         //Get identifier
         byte[] buff = new byte[4];
-        _sock.Receive(buff, buff.Length, SocketFlags.None);
+        stream.Read(buff, 0, buff.Length);
         Array.Reverse(buff);
         int identifier = BitConverter.ToInt32(buff, 0);
 
@@ -127,11 +123,9 @@ public class HubServerHandle
         {
             try
             {
-                byte[] mssgType = new byte[1];
-                _sock.Receive(mssgType, mssgType.Length, SocketFlags.None);
-                GD.Print(mssgType[0]);
-                GD.Print("DESIRED: " + ((byte)MessageType.ADD_GAMESERVER).ToString());
-                switch (mssgType[0])
+                byte mssgType = (byte)stream.ReadByte();
+                GD.Print("MESSAGE TYPE: " + mssgType);
+                switch (mssgType)
                 {
                     case (byte)MessageType.ADD_GAMESERVER:
                         GD.Print("ADDING");

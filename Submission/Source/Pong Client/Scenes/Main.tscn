@@ -1,0 +1,381 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://Assets/Dynamic Fonts/Blippo.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Assets/Dynamic Fonts/Pixeloid.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Assets/Dynamic Fonts/PixeloidSmall.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Scripts/Menu.cs" type="Script" id=4]
+[ext_resource path="res://Assets/Dynamic Fonts/PixeloidButton.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Assets/Dynamic Fonts/PixeloidSmallName.tres" type="DynamicFont" id=6]
+[ext_resource path="res://Scripts/Global.cs" type="Script" id=7]
+[ext_resource path="res://Assets/Images/refresh.png" type="Texture" id=8]
+[ext_resource path="res://Assets/Images/Ball.png" type="Texture" id=9]
+[ext_resource path="res://Assets/Images/Divider.png" type="Texture" id=10]
+[ext_resource path="res://Assets/Dynamic Fonts/Pixeloid_serverMssg.tres" type="DynamicFont" id=11]
+[ext_resource path="res://Assets/Dynamic Fonts/PixeloidSmallName_Browser.tres" type="DynamicFont" id=12]
+[ext_resource path="res://Assets/Dynamic Fonts/Pixeloid_Score.tres" type="DynamicFont" id=13]
+[ext_resource path="res://Scripts/GameState.cs" type="Script" id=14]
+[ext_resource path="res://Assets/Audio/Score.wav" type="AudioStream" id=15]
+[ext_resource path="res://Assets/Audio/Beep.wav" type="AudioStream" id=16]
+[ext_resource path="res://Assets/Audio/Boop.wav" type="AudioStream" id=17]
+[ext_resource path="res://Assets/Audio/Crash.wav" type="AudioStream" id=18]
+
+[sub_resource type="Theme" id=3]
+
+[sub_resource type="RectangleShape2D" id=6]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 7.5, 35 )
+
+[sub_resource type="CircleShape2D" id=5]
+radius = 5.0
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 7 )
+
+[node name="Background" type="Polygon2D" parent="."]
+color = Color( 0, 0, 0, 1 )
+polygon = PoolVector2Array( 0, 0, 136, 1, 640, 0, 640, 205.348, 640, 480, 0, 480 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2( 320, 240 )
+
+[node name="MenuUI" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="Title" type="Label" parent="MenuUI"]
+margin_right = 640.0
+margin_bottom = 81.0
+custom_fonts/font = ExtResource( 1 )
+text = "PONG"
+align = 1
+valign = 1
+
+[node name="M1" type="Node2D" parent="MenuUI"]
+
+[node name="Fields" type="Node2D" parent="MenuUI/M1"]
+position = Vector2( 320, 320 )
+
+[node name="LBL_Name_Prompt" type="Label" parent="MenuUI/M1/Fields"]
+margin_left = -160.0
+margin_top = -220.0
+margin_right = 160.0
+margin_bottom = -198.0
+custom_fonts/font = ExtResource( 2 )
+text = "Enter Player Name:"
+align = 1
+valign = 1
+
+[node name="TXT_Player_Name" type="LineEdit" parent="MenuUI/M1/Fields"]
+margin_left = -180.0
+margin_top = -180.0
+margin_right = 180.0
+margin_bottom = -150.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 6 )
+align = 1
+max_length = 30
+placeholder_text = "------------------------------"
+placeholder_alpha = 0.71
+
+[node name="Color Picker" type="Node2D" parent="MenuUI/M1/Fields"]
+
+[node name="SLI_Red" type="HSlider" parent="MenuUI/M1/Fields/Color Picker"]
+margin_left = -120.0
+margin_top = -140.0
+margin_right = 160.0
+margin_bottom = -124.0
+max_value = 255.0
+
+[node name="SLI_Green" type="HSlider" parent="MenuUI/M1/Fields/Color Picker"]
+margin_left = -120.0
+margin_top = -120.0
+margin_right = 160.0
+margin_bottom = -104.0
+max_value = 255.0
+
+[node name="SLI_Blue" type="HSlider" parent="MenuUI/M1/Fields/Color Picker"]
+margin_left = -120.0
+margin_top = -100.0
+margin_right = 160.0
+margin_bottom = -84.0
+max_value = 255.0
+
+[node name="R" type="Label" parent="MenuUI/M1/Fields/Color Picker"]
+margin_left = -150.0
+margin_top = -140.0
+margin_right = -130.0
+margin_bottom = -121.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = ExtResource( 3 )
+text = "R"
+align = 1
+valign = 1
+
+[node name="G" type="Label" parent="MenuUI/M1/Fields/Color Picker"]
+margin_left = -150.0
+margin_top = -120.0
+margin_right = -130.0
+margin_bottom = -101.0
+custom_colors/font_color = Color( 0, 1, 0, 1 )
+custom_fonts/font = ExtResource( 3 )
+text = "G"
+align = 1
+valign = 1
+
+[node name="B" type="Label" parent="MenuUI/M1/Fields/Color Picker"]
+margin_left = -150.0
+margin_top = -100.0
+margin_right = -130.0
+margin_bottom = -81.0
+custom_colors/font_color = Color( 0, 0, 1, 1 )
+custom_fonts/font = ExtResource( 3 )
+text = "B"
+align = 1
+valign = 1
+
+[node name="LBL_IP" type="Label" parent="MenuUI/M1/Fields"]
+margin_left = -121.0
+margin_top = -6.0
+margin_right = -11.0
+margin_bottom = 13.0
+custom_fonts/font = ExtResource( 3 )
+text = "IP Address:"
+
+[node name="LBL_Port" type="Label" parent="MenuUI/M1/Fields"]
+margin_left = -121.0
+margin_top = 27.0
+margin_right = -71.0
+margin_bottom = 46.0
+custom_fonts/font = ExtResource( 3 )
+text = "Port:"
+
+[node name="TXT_Addr" type="LineEdit" parent="MenuUI/M1/Fields"]
+margin_left = 13.0
+margin_top = -9.0
+margin_right = 143.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 3 )
+placeholder_text = "X.X.X.X"
+
+[node name="TXT_Port" type="LineEdit" parent="MenuUI/M1/Fields"]
+margin_left = 13.0
+margin_top = 22.0
+margin_right = 143.0
+margin_bottom = 51.0
+custom_colors/selection_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = ExtResource( 3 )
+placeholder_text = "XXXX"
+
+[node name="LBL_Connect_Prompt" type="Label" parent="MenuUI/M1/Fields"]
+margin_left = -160.0
+margin_top = -45.0
+margin_right = 160.0
+margin_bottom = -23.0
+custom_fonts/font = ExtResource( 2 )
+text = "Connect to Browser Server:"
+align = 1
+valign = 1
+
+[node name="BTN_Connect" type="Button" parent="MenuUI/M1/Fields"]
+margin_left = -90.0
+margin_top = 85.0
+margin_right = 90.0001
+margin_bottom = 110.0
+custom_fonts/font = ExtResource( 5 )
+text = "Connect"
+
+[node name="M2" type="Node2D" parent="MenuUI"]
+visible = false
+
+[node name="ServerList" type="ScrollContainer" parent="MenuUI/M2"]
+margin_top = 108.0
+margin_right = 640.0
+margin_bottom = 429.0
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuUI/M2/ServerList"]
+margin_right = 640.0
+margin_bottom = 321.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 3 )
+custom_constants/separation = 80
+
+[node name="BTN_Refresh" type="Button" parent="MenuUI/M2"]
+margin_left = 583.0
+margin_top = 429.0
+margin_right = 633.0
+margin_bottom = 479.0
+icon = ExtResource( 8 )
+flat = true
+icon_align = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="MenuUI/M2"]
+margin_top = 80.0
+margin_right = 640.0
+margin_bottom = 100.0
+custom_fonts/font = ExtResource( 3 )
+text = "Server List"
+align = 1
+
+[node name="Back" type="Button" parent="MenuUI/M2"]
+margin_left = 12.0
+margin_top = 11.0
+margin_right = 77.0
+margin_bottom = 36.0
+custom_fonts/font = ExtResource( 3 )
+text = "Back"
+
+[node name="Game" type="Node2D" parent="."]
+visible = false
+script = ExtResource( 14 )
+
+[node name="Boundary" type="Node2D" parent="Game"]
+
+[node name="TopBound" type="Area2D" parent="Game/Boundary"]
+position = Vector2( 320, -2 )
+scale = Vector2( 32, 0.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Boundary/TopBound"]
+shape = SubResource( 6 )
+
+[node name="BottomBound" type="Area2D" parent="Game/Boundary"]
+position = Vector2( 320, 482 )
+scale = Vector2( 32, 0.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Boundary/BottomBound"]
+shape = SubResource( 6 )
+
+[node name="LeftBound" type="Area2D" parent="Game/Boundary"]
+position = Vector2( -4, 240 )
+scale = Vector2( 0.8, 23.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Boundary/LeftBound"]
+shape = SubResource( 6 )
+
+[node name="RightBound" type="Area2D" parent="Game/Boundary"]
+position = Vector2( 644, 240 )
+scale = Vector2( 0.8, 23.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Boundary/RightBound"]
+shape = SubResource( 6 )
+
+[node name="TopHit" type="AudioStreamPlayer2D" parent="Game/Boundary"]
+position = Vector2( 320, 240 )
+stream = ExtResource( 18 )
+
+[node name="BottomHit" type="AudioStreamPlayer2D" parent="Game/Boundary"]
+position = Vector2( 320, 240 )
+stream = ExtResource( 18 )
+
+[node name="Score" type="AudioStreamPlayer2D" parent="Game/Boundary"]
+position = Vector2( 320, 240 )
+stream = ExtResource( 15 )
+
+[node name="Player1Paddle" type="Area2D" parent="Game"]
+position = Vector2( 30, 240 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Game/Player1Paddle"]
+scale = Vector2( 1.5, 7 )
+polygon = PoolVector2Array( 5, 5, -5, 5, -5, -5, 5, -5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Player1Paddle"]
+scale = Vector2( 1.3, 1.1 )
+shape = SubResource( 4 )
+
+[node name="P1PHit" type="AudioStreamPlayer2D" parent="Game/Player1Paddle"]
+stream = ExtResource( 17 )
+
+[node name="Player2Paddle" type="Area2D" parent="Game"]
+position = Vector2( 610, 240 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Game/Player2Paddle"]
+scale = Vector2( 1.5, 7 )
+polygon = PoolVector2Array( 5, 5, -5, 5, -5, -5, 5, -5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Player2Paddle"]
+scale = Vector2( 1.3, 1.1 )
+shape = SubResource( 4 )
+
+[node name="P2PHit" type="AudioStreamPlayer2D" parent="Game/Player2Paddle"]
+stream = ExtResource( 16 )
+
+[node name="Ball" type="Area2D" parent="Game"]
+position = Vector2( 320, 240 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Game/Ball"]
+scale = Vector2( 1.5, 1.5 )
+shape = SubResource( 5 )
+
+[node name="ballTexture" type="TextureRect" parent="Game/Ball"]
+margin_left = -5.0
+margin_top = -5.0
+margin_right = 5.0
+margin_bottom = 5.0
+texture = ExtResource( 9 )
+expand = true
+
+[node name="UI" type="Control" parent="Game"]
+margin_right = 640.0
+margin_bottom = 480.0
+
+[node name="LBL_p1Score" type="Label" parent="Game/UI"]
+margin_top = 26.0
+margin_right = 280.0
+margin_bottom = 105.0
+custom_fonts/font = ExtResource( 13 )
+text = "0"
+align = 2
+valign = 1
+
+[node name="LBL_p2Score" type="Label" parent="Game/UI"]
+margin_left = 360.0
+margin_top = 25.0
+margin_right = 640.0
+margin_bottom = 105.0
+custom_fonts/font = ExtResource( 13 )
+text = "0"
+valign = 1
+
+[node name="LBL_p1Name" type="Label" parent="Game/UI"]
+margin_left = 10.0
+margin_top = 8.0
+margin_right = 280.0
+margin_bottom = 28.0
+custom_fonts/font = ExtResource( 12 )
+text = "--------"
+align = 2
+
+[node name="LBL_p2Name" type="Label" parent="Game/UI"]
+margin_left = 360.0
+margin_top = 8.0
+margin_right = 630.0
+margin_bottom = 28.0
+custom_fonts/font = ExtResource( 12 )
+text = "--------"
+
+[node name="LBL_serverMssg" type="Label" parent="Game/UI"]
+margin_top = 462.0
+margin_right = 640.0
+margin_bottom = 480.0
+custom_fonts/font = ExtResource( 11 )
+
+[node name="Divider" type="TextureRect" parent="Game/UI"]
+margin_left = 319.0
+margin_right = 321.0
+margin_bottom = 480.0
+texture = ExtResource( 10 )
+
+[connection signal="value_changed" from="MenuUI/M1/Fields/Color Picker/SLI_Red" to="MenuUI" method="redChanged"]
+[connection signal="value_changed" from="MenuUI/M1/Fields/Color Picker/SLI_Green" to="MenuUI" method="greenChanged"]
+[connection signal="value_changed" from="MenuUI/M1/Fields/Color Picker/SLI_Blue" to="MenuUI" method="blueChanged"]
+[connection signal="pressed" from="MenuUI/M1/Fields/BTN_Connect" to="MenuUI" method="onConnectButtonPress"]
+[connection signal="button_up" from="MenuUI/M2/BTN_Refresh" to="MenuUI" method="refreshServerList"]
+[connection signal="button_up" from="MenuUI/M2/Back" to="MenuUI" method="goBack"]
+[connection signal="area_entered" from="Game/Boundary/TopBound" to="Game" method="topBoundHit"]
+[connection signal="area_entered" from="Game/Boundary/BottomBound" to="Game" method="bottomBoundHit"]
+[connection signal="area_entered" from="Game/Boundary/LeftBound" to="Game" method="scoreHit"]
+[connection signal="area_entered" from="Game/Boundary/RightBound" to="Game" method="scoreHit"]
+[connection signal="area_entered" from="Game/Player1Paddle" to="Game" method="leftPaddleHit"]
+[connection signal="area_entered" from="Game/Player2Paddle" to="Game" method="rightPaddleHit"]

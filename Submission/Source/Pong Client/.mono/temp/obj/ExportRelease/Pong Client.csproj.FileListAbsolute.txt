@@ -1,0 +1,9 @@
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\bin\ExportRelease\Pong Client.dll
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\bin\ExportRelease\Pong Client.pdb
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\obj\ExportRelease\Pong Client.csproj.AssemblyReference.cache
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\obj\ExportRelease\Pong Client.GeneratedMSBuildEditorConfig.editorconfig
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\obj\ExportRelease\Pong Client.AssemblyInfoInputs.cache
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\obj\ExportRelease\Pong Client.AssemblyInfo.cs
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\obj\ExportRelease\Pong Client.csproj.CoreCompileInputs.cache
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\obj\ExportRelease\Pong Client.dll
+E:\School Work\CS401\Multiplayer Pong\Pong Client\.mono\temp\obj\ExportRelease\Pong Client.pdb

@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch GameServer",
+            "request": "launch",
+            "args": "port:6970: addr:75.131.111.19 serverName:Gameserver1 hubPort:6969 hubAddr:75.131.111.19",
+            "mainClass": "com.gameserver.GameServer",
+            "projectName": "gameserver"
+        }
+    ]
+}

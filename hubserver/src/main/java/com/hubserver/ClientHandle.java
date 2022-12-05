@@ -200,8 +200,10 @@ public class ClientHandle extends Thread{
                 }
             } catch (EOFException e){
                 endHandle();
+                System.out.println(e);
             } catch (SocketException e){
                 endHandle();
+                System.out.println(e);
             } catch (Exception e) {
                 System.out.println("HANDLE INTERRUPTED " + e.getClass().getCanonicalName());
             }

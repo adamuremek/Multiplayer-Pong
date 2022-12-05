@@ -44,6 +44,17 @@ public class GameState : Node2D
 		p2Paddle = GetTree().Root.GetNode("Main").GetNode("Game/Player2Paddle") as Node2D;
 		ball = GetTree().Root.GetNode("Main").GetNode("Game/Ball") as Node2D;
 
+		Color black = new Color(0f, 0f, 0f);
+		txt_p1Score.AddColorOverride("font_color", black);
+		txt_p2Score.AddColorOverride("font_color", black);
+		txt_p1Name.AddColorOverride("font_color", black);
+		txt_p2Name.AddColorOverride("font_color", black);
+		Polygon2D paddle1 = p1Paddle.GetChild(0) as Polygon2D;
+		paddle1.Color = black;
+		Polygon2D paddle2 = p2Paddle.GetChild(0) as Polygon2D;
+		paddle2.Color = black;
+
+
 		paddle1Hit = GetNode("Player1Paddle/P1PHit") as AudioStreamPlayer2D;
 		paddle2Hit = GetNode("Player2Paddle/P2PHit") as AudioStreamPlayer2D;
 		topHit = GetNode("Boundary/TopHit") as AudioStreamPlayer2D;
